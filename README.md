@@ -4,7 +4,6 @@
 
 本项目是一个基于 Python 的工具集，旨在方便地从西南交通大学（SWJTU）官方网站（如教务网）获取各类公开信息。项目通过模拟登录、接口请求和数据解析，实现信息查询的自动化。
 
-目前已实现的功能是查询学生信息，未来计划扩展更多查询功能。
 
 ## 已实现功能
 
@@ -12,6 +11,11 @@
 
 - **功能**: 根据学生姓名等关键词查询学生的公开基本信息（学号、姓名、学院、专业）。
 - **依赖**: `login.py`
+
+### 2. 扬华素质网公示信息爬虫 (`yanghua_scraper.py`)
+
+- **功能**: 爬取扬华素质网公示页面的学生名单信息（如奖助学金获得者名单），自动解析分页数据并保存为Excel文件。
+
 
 
 ## 使用方法
@@ -67,12 +71,44 @@
         print(f"发生错误: {e}")
     ```
 
-## 未来计划
+### 扬华素质网公示信息爬虫
 
-- [ ] 查询课程信息
-- [ ] 查询成绩信息
-- [ ] 查询空闲教室
-- [ ] ... (欢迎提出更多想法)
+1.  **导入函数**:
+    将 `scrape_student_list` 函数导入到你的项目中。
+
+    ```python
+    from yanghua_scraper import scrape_student_list
+    ```
+
+2.  **使用示例**:
+    传入扬华素质网公示页面的URL即可爬取数据。
+
+    ```python
+    # 爬取单个公示页面
+    url = 'http://xg.swjtu.edu.cn/web/Publicity/BursaryDetail?wz34zM3=xxx.shtml'
+    df = scrape_student_list(url)
+    
+    if df is not None:
+        print(f"成功爬取 {len(df)} 条记录")
+        print(df.head())  # 查看前几条数据
+    ```
+
+3.  **批量爬取示例**:
+    ```python
+    from yanghua_scraper import scrape_student_list
+    
+    # 多个公示页面URL列表
+    urls = [
+        'http://xg.swjtu.edu.cn/web/Publicity/BursaryDetail?wz34zM3=url1.shtml',
+        'http://xg.swjtu.edu.cn/web/Publicity/BursaryDetail?wz34zM3=url2.shtml',
+        'http://xg.swjtu.edu.cn/web/Publicity/BursaryDetail?wz34zM3=url3.shtml'
+    ]
+    
+    for url in urls:
+        scrape_student_list(url)  # 自动保存为Excel文件
+    ```
+
+
 
 ## 注意事项
 
